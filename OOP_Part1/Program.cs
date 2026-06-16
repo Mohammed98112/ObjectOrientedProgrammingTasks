@@ -166,7 +166,59 @@ namespace OOP_Part1
 
 
         //case 3) Book a Room for a Guest
+        public static void BookaRoomforaGuest()
+        {
 
+            //req1: Prompt for the guest ID and the desired room number.
+
+            Console.WriteLine("Enter guest ID: ");
+            string GuestIDD = Console.ReadLine();
+            Console.WriteLine("Enter the Room Number: ");
+            int RoomNum = Convert.ToInt32(Console.ReadLine());
+
+
+            //req2: Use LINQ to find the guest in the guests list and the room in the rooms list. If either is not found, display an appropriate error and return.
+
+            //Find guest using LINQ FirstOrDefault
+            Guest Guest = guests.FirstOrDefault(g=>g.GuestId == GuestIDD);
+            if (Guest == null)
+            {
+                Console.WriteLine("Error: Guest not found");
+
+
+                return;
+            }
+
+            // Find room using LINQ FirstOrDefault
+            Room RRoom = rooms.FirstOrDefault(r=>r.RoomNumber == RoomNum);
+
+            if (RoomNum == null)
+            {
+                Console.WriteLine("Error: Room not found");
+
+
+                return;
+            }
+
+
+            //req3: Check that the selected room is currently available. If not, display 'Room is already booked.' and return.
+
+            if (rooms.Any(s => s.RoomNumber == RoomNum && s.IsAvailable == true))
+            {
+                Console.WriteLine("Room is already booked.");
+                return;
+            }
+
+
+
+            //req4: If all checks pass: assign the room number to the guest's roomNumber field, and set the room's isAvailable to false.
+
+   
+
+
+            //req5: Display a booking confirmation: guest name, room number, room type, price per night, total nights, and total cost via calculateTotalCost().
+
+        }
 
 
         //case 4) Search & Filter Rooms
@@ -212,6 +264,7 @@ namespace OOP_Part1
 
                     //case 3) Book a Room for a Guest
                     case 3:
+                        BookaRoomforaGuest();
                         break;
 
 
