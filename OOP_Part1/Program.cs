@@ -1,4 +1,7 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Drawing;
+using System.Numerics;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OOP_Part1
 {
@@ -15,9 +18,9 @@ namespace OOP_Part1
     public class Guest // Represents a hotel guest, storing their personal details, assigned room number, check-in date, and number of nights staying.
 
     {
-        public int GuestId;
+        public string GuestId;
         public string GuestName;
-        public int RoomNumber;
+        public string RoomNumber;
         public DateTime CheckInDate;
         public int TotalNights;
     }
@@ -31,14 +34,7 @@ namespace OOP_Part1
         //MainMenu
         public static int mainmenue()
         {
-            // Pre-load 6 rooms before starting the system (mix of Single, Double, Suite)
-            rooms.Add(new Room { RoomNumber = 101, RoomType = "Single", PricePerNight = 60, IsAvailable = true });
-            rooms.Add(new Room { RoomNumber = 102, RoomType = "Single", PricePerNight = 88, IsAvailable = true });
-            rooms.Add(new Room { RoomNumber = 103, RoomType = "Double", PricePerNight = 77, IsAvailable = true });
-            rooms.Add(new Room { RoomNumber = 104, RoomType = "Double", PricePerNight = 14, IsAvailable = true });
-            rooms.Add(new Room { RoomNumber = 105, RoomType = "Suite", PricePerNight = 555, IsAvailable = true });
-            rooms.Add(new Room { RoomNumber = 106, RoomType = "Suite", PricePerNight = 88888, IsAvailable = true });
-
+            
             Console.WriteLine("=================================");
             Console.WriteLine(" GRAND VISTA HOTEL — MANAGEMENT SYSTEM");
             Console.WriteLine("=================================");
@@ -120,19 +116,58 @@ namespace OOP_Part1
 
 
 
-
-
-
-
-
-
-
-
-
-
         //case 2) Register New Guest
 
+        public static void RegisterNewGuest()
+        {
+            //req1: Prompt for: guest name, check -in date(as a string), and number of nights they plan to stay.
+
+            Console.WriteLine("Enter guest name: ");
+            string GuestName = Console.ReadLine();
+            Console.WriteLine("Enter the date: ");
+            DateTime CheckInDate = Convert.ToDateTime(Console.ReadLine());
+            Console.WriteLine("Enter Total Night: ");
+            int TotalNights = Convert.ToInt32(Console.ReadLine());
+
+            // validation: nights must be positive
+            if (TotalNights <= 0)
+            {
+                Console.WriteLine("Error: Total nights must be a positive number.");
+                return;
+            }
+
+
+            //req 2: Auto - generate the guest ID from the current size of the guests list(format: G001, G002, G003...).
+
+            string generatedGuestId = "G" + (guests.Count + 1).ToString("D3");
+
+
+            //req 3: Create a new Guest object with roomNumber set to a default value of 'Not Assigned', then add it to the guests list.
+            Guest newGuest = new Guest
+            {
+                GuestId = generatedGuestId,
+                GuestName = GuestName,
+                CheckInDate = CheckInDate,
+                TotalNights = TotalNights,
+                RoomNumber = "Not Assigned"
+            };
+
+            guests.Add(newGuest);
+
+            //req 4: Display a confirmation showing the generated guest ID and all entered details.
+
+            Console.WriteLine("Guest registered successfully!");
+            Console.WriteLine($"Guest ID   : {newGuest.GuestId}");
+            Console.WriteLine($"Name       : {newGuest.GuestName}");
+            Console.WriteLine($"Check-in   : {newGuest.CheckInDate}");
+            Console.WriteLine($"Nights     : {newGuest.TotalNights}");
+            Console.WriteLine($"Room       : {newGuest.RoomNumber}");
+        }
+
+
         //case 3) Book a Room for a Guest
+
+
 
         //case 4) Search & Filter Rooms
 
@@ -145,6 +180,13 @@ namespace OOP_Part1
 
         static void Main(string[] args)
         {
+            // Pre-load 6 rooms before starting the system (mix of Single, Double, Suite)
+            rooms.Add(new Room { RoomNumber = 101, RoomType = "Single", PricePerNight = 60, IsAvailable = true });
+            rooms.Add(new Room { RoomNumber = 102, RoomType = "Single", PricePerNight = 88, IsAvailable = true });
+            rooms.Add(new Room { RoomNumber = 103, RoomType = "Double", PricePerNight = 77, IsAvailable = true });
+            rooms.Add(new Room { RoomNumber = 104, RoomType = "Double", PricePerNight = 14, IsAvailable = true });
+            rooms.Add(new Room { RoomNumber = 105, RoomType = "Suite", PricePerNight = 555, IsAvailable = true });
+            rooms.Add(new Room { RoomNumber = 106, RoomType = "Suite", PricePerNight = 88888, IsAvailable = true });
 
 
             bool exit = false;
@@ -164,6 +206,7 @@ namespace OOP_Part1
 
                     //case 2) Register New Guest
                     case 2:
+                        RegisterNewGuest();
                         break;
 
 
