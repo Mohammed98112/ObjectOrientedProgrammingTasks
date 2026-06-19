@@ -32,6 +32,40 @@ namespace OOP_Part1
 
 
 
+        //sub menu method
+        static void CheckInMenu()
+        {
+            bool back = false;
+            while (!back)
+            {
+                Console.WriteLine("--- Passenger Check-In ---");
+                Console.WriteLine("1) ");
+                Console.WriteLine("2) ");
+                Console.WriteLine("3) ");
+                Console.WriteLine("0) ");
+                Console.Write("Choose an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ();
+                        break;
+                    case "2":
+                        ();
+                        break;
+                    case "3":
+                        ();
+                        break;
+                    case "0":
+                        back = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option. Try again.");
+                        break;
+                }
+            }
+        }
 
         //MainMenu
         public static int mainmenue()
