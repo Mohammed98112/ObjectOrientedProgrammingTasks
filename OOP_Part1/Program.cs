@@ -31,6 +31,8 @@ namespace OOP_Part1
         static List<Guest> guests = new List<Guest>(); // Stores all registered guests in the hotel system (used for booking, check-in, and check-out operations)
 
 
+
+
         //MainMenu
         public static int mainmenue()
         {
@@ -166,58 +168,72 @@ namespace OOP_Part1
 
 
         //case 3) Book a Room for a Guest
+
         public static void BookaRoomforaGuest()
         {
-
             //req1: Prompt for the guest ID and the desired room number.
 
-            Console.WriteLine("Enter guest ID: ");
-            string GuestIDD = Console.ReadLine();
-            Console.WriteLine("Enter the Room Number: ");
-            int RoomNum = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter Guest ID: ");
+            string guestID = Console.ReadLine();
+
+            Console.Write("Enter Room Number: ");
+            int roomNum = Convert.ToInt32(Console.ReadLine());
 
 
-            //req2: Use LINQ to find the guest in the guests list and the room in the rooms list. If either is not found, display an appropriate error and return.
+            //req2: Use LINQ to find the guest in the guests list and the room in the rooms list.
+            //If either is not found, display an appropriate error and return.
 
-            //Find guest using LINQ FirstOrDefault
-            Guest Guest = guests.FirstOrDefault(g=>g.GuestId == GuestIDD);
-            if (Guest == null)
+            // Find the guest using LINQ FirstOrDefault()
+            Guest guest = guests.FirstOrDefault(g => g.GuestId == guestID);
+
+            if (guest == null)
             {
-                Console.WriteLine("Error: Guest not found");
-
-
+                Console.WriteLine("Error: Guest not found.");
                 return;
             }
 
-            // Find room using LINQ FirstOrDefault
-            Room RRoom = rooms.FirstOrDefault(r=>r.RoomNumber == RoomNum);
+            // Find the room using LINQ FirstOrDefault()
+            Room room = rooms.FirstOrDefault(r => r.RoomNumber == roomNum);
 
-            if (RoomNum == null)
+            if (room == null)
             {
-                Console.WriteLine("Error: Room not found");
-
-
+                Console.WriteLine("Error: Room not found.");
                 return;
             }
 
 
-            //req3: Check that the selected room is currently available. If not, display 'Room is already booked.' and return.
+            //req3: Check that the selected room is currently available.
+            //If not, display "Room is already booked." and return.
 
-            if (rooms.Any(s => s.RoomNumber == RoomNum && s.IsAvailable == true))
+            if (!room.IsAvailable)
             {
                 Console.WriteLine("Room is already booked.");
                 return;
             }
 
 
+            //req4: If all checks pass:
+            //Assign the room number to the guest's RoomNumber field,
+            //and set the room's IsAvailable to false.
 
-            //req4: If all checks pass: assign the room number to the guest's roomNumber field, and set the room's isAvailable to false.
+            guest.RoomNumber = room.RoomNumber.ToString();
+            room.IsAvailable = false;
 
-   
 
+            //req5: Display a booking confirmation showing:
+            //Guest name, room number, room type,
+            //price per night, total nights,
+            //and total cost using CalculateTotalCost().
 
-            //req5: Display a booking confirmation: guest name, room number, room type, price per night, total nights, and total cost via calculateTotalCost().
+            double totalCost = room.PricePerNight * guest.TotalNights;
 
+            Console.WriteLine("\nBooking Successful!");
+            Console.WriteLine($"Guest Name   : {guest.GuestName}");
+            Console.WriteLine($"Room Number  : {room.RoomNumber}");
+            Console.WriteLine($"Room Type    : {room.RoomType}");
+            Console.WriteLine($"Price/Night  : {room.PricePerNight}");
+            Console.WriteLine($"Total Nights : {guest.TotalNights}");
+            Console.WriteLine($"Total Cost   : {totalCost}");
         }
 
 
