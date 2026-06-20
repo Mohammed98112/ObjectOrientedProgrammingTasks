@@ -32,40 +32,7 @@ namespace OOP_Part1
 
 
 
-        //sub menu method
-        static void CheckInMenu()
-        {
-            bool back = false;
-            while (!back)
-            {
-                Console.WriteLine("--- Passenger Check-In ---");
-                Console.WriteLine("1) ");
-                Console.WriteLine("2) ");
-                Console.WriteLine("3) ");
-                Console.WriteLine("0) ");
-                Console.Write("Choose an option: ");
-                string choice = Console.ReadLine();
-
-                switch (choice)
-                {
-                    case "1":
-                        ();
-                        break;
-                    case "2":
-                        ();
-                        break;
-                    case "3":
-                        ();
-                        break;
-                    case "0":
-                        back = true;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid option. Try again.");
-                        break;
-                }
-            }
-        }
+       
 
         //MainMenu
         public static int mainmenue()
@@ -273,6 +240,159 @@ namespace OOP_Part1
 
         //case 4) Search & Filter Rooms
 
+        //req1: Display a sub-menu: (1) Show all available rooms (2)
+        //Filter by room type (3) Filter by max price (4) Room price statistics(0) Back.
+
+        //sub menu method
+        static void SubMenu()
+        {
+            bool back = false;
+            while (!back)
+            {
+                Console.WriteLine("--- Search & Filter Rooms ---");
+                Console.WriteLine("1) Show all available rooms");
+                Console.WriteLine("2) Filter by room type");
+                Console.WriteLine("3) Filter by max price");
+                Console.WriteLine("4) Room price statistics");
+                Console.WriteLine("0) Back");
+                Console.Write("Choose an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ShowAllAvailableRooms();
+                        break;
+                    case "2":
+                        FilterByRoomType();
+                        break;
+                    case "3":
+                        FilterByMaxPrice();
+                        break;
+                    case "4":
+                        RoomPriceStatistics();
+                        break;
+                    case "0":
+                        back = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid option. Try again.");
+                        break;
+                }
+            }
+        }
+
+        //req2: Option 1: retrieve all rooms where isAvailable is true using Where(), sorted by price ascending with OrderBy(). Display
+        //count of results.
+        public static void ShowAllAvailableRooms()
+        {
+            var availableRooms = rooms
+                .Where(r => r.IsAvailable)
+                .OrderBy(r => r.PricePerNight);
+
+            Console.WriteLine($"Available Rooms: {availableRooms.Count()}");
+
+            //req6: If no rooms match display an appropriate message.
+            if (!availableRooms.Any())
+            {
+                Console.WriteLine("No rooms found for the selected criteria.");
+                return;
+            }
+
+            foreach (var room in availableRooms)
+            {
+                Console.WriteLine($"Room Number : {room.RoomNumber}");
+                Console.WriteLine($"Room Type   : {room.RoomType}");
+                Console.WriteLine($"Price       : {room.PricePerNight:F2}");
+                Console.WriteLine($"Available   : {room.IsAvailable}");
+                Console.WriteLine("----------------------------");
+            }
+        }
+
+        //req3: Option 2: prompt for a room type, then use Where() to retrieve all rooms of that type regardless of availability. Display
+        //count and results.
+        public static void FilterByRoomType()
+        {
+            Console.Write("Enter Room Type (Single/Double/Suite): ");
+            string roomType = Console.ReadLine();
+
+            var filteredRooms = rooms
+               .Where(r => r.RoomType.ToUpper() == roomType.ToUpper())
+
+            Console.WriteLine($"Rooms Found: {filteredRooms.Count()}");
+
+            //req6: If no rooms match display an appropriate message.
+            if (!filteredRooms.Any())
+            {
+                Console.WriteLine("No rooms found for the selected criteria.");
+                return;
+            }
+
+            foreach (var room in filteredRooms)
+            {
+                Console.WriteLine($"Room Number : {room.RoomNumber}");
+                Console.WriteLine($"Room Type   : {room.RoomType}");
+                Console.WriteLine($"Price       : {room.PricePerNight:F2}");
+                Console.WriteLine($"Available   : {room.IsAvailable}");
+                Console.WriteLine("----------------------------");
+            }
+        }
+
+        //req4: Option 3: prompt for a maximum price, then use Where() to retrieve available rooms at or below that price, sorted
+        //ascending.Display count.
+        public static void FilterByMaxPrice()
+        {
+            Console.Write("Enter Maximum Price: ");
+            double maxPrice = Convert.ToDouble(Console.ReadLine());
+
+            var filteredRooms = rooms
+                .Where(r => r.IsAvailable && r.PricePerNight <= maxPrice)
+                .OrderBy(r => r.PricePerNight);
+
+            Console.WriteLine($"Rooms Found: {filteredRooms.Count()}");
+
+            //req6: If no rooms match display an appropriate message.
+            if (!filteredRooms.Any())
+            {
+                Console.WriteLine("No rooms found for the selected criteria.");
+                return;
+            }
+
+            foreach (var room in filteredRooms)
+            {
+                Console.WriteLine($"Room Number : {room.RoomNumber}");
+                Console.WriteLine($"Room Type   : {room.RoomType}");
+                Console.WriteLine($"Price       : {room.PricePerNight:F2}");
+                Console.WriteLine($"Available   : {room.IsAvailable}");
+                Console.WriteLine("----------------------------");
+            }
+        }
+
+        //req5: Option 4: use LINQ aggregation on the rooms list to display — total rooms (Count), available rooms (Count with
+        //condition), average price(Average), cheapest price(Min), most expensive price(Max).
+        public static void RoomPriceStatistics()
+        {
+            if (!rooms.Any())
+            {
+                Console.WriteLine("No rooms available.");
+                return;
+            }
+
+            Console.WriteLine($"Total Rooms       : {rooms.Count()}");
+            Console.WriteLine($"Available Rooms   : {rooms.Count(r => r.IsAvailable)}");
+            Console.WriteLine($"Average Price     : {rooms.Average(r => r.PricePerNight):F2}");
+            Console.WriteLine($"Cheapest Price    : {rooms.Min(r => r.PricePerNight):F2}");
+            Console.WriteLine($"Most Expensive    : {rooms.Max(r => r.PricePerNight):F2}");
+        }
+
+
+
+
+
+
+
+
+
         //case 5) Guest & Booking Statistics
 
         //case 6) Check Out a Guest
@@ -321,6 +441,7 @@ namespace OOP_Part1
 
                     //case 4) Search & Filter Rooms
                     case 4:
+                        SubMenu();
                         break;
 
 
